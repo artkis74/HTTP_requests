@@ -1,16 +1,25 @@
 import requests
-from  pprint import pprint
 import json
+
 def http_request():
     url = "https://akabab.github.io/superhero-api/api/all.json"
-    # params = {"model": "nike123"}
-    # headers = {"Authorization": "secret - token - 123"}
     response = requests.get(url)
-    pprint(response.json())
-    with open('superheroes.json', 'w') as f:
+    with open('superheroes.json', 'w', encoding="utf-8") as f:
        json.dump(response.json(), f)
 
+with open('superheroes.json') as f:
+    json_data = json.load(f)
+    character = {}
+for hero in json_data:
+    if hero['name'] == "Hulk" or hero['name'] == 'Captain America' or hero['name'] == 'Thanos':
+        intelligence = hero['powerstats']['intelligence']
+        name = hero['name']
+        character[name] = intelligence
 
+def the_best_intelligence(hero):
+    filter_dict = [(value, key) for key, value in hero.items()]
+    superhero = max(filter_dict)[1]
+    return f'Самый умный герой {superhero} c IQ {hero[superhero]}'
 
 if __name__ == '__main__':
-    http_request()
+    print(the_best_intelligence(character))
